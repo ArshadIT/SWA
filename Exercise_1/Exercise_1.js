@@ -14,12 +14,12 @@ function DataType(_type, _unit) {
 function WeatherData(number) {
     const value = () => number;
     let d= new Date();
-    let place =  "Viborg";
+    let place =  "Aarhus";
     return Object.assign ({value},Event(d,place), DataType('Celcius','30'))
 }
 
 let d= new Date();
-let place =  "Viborg";
+let place =  "Aarhus";
 const test = Event(d,place)
 const test2 = DataType('Celcius','30')
 const test3 = WeatherData(123)
