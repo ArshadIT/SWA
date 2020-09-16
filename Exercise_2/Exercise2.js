@@ -65,7 +65,7 @@ Wind.prototype = {
     } 
 }
 
-class Wind extends WeatherData {
+class Precipitation extends WeatherData {
     constructor(date, place, type, unit, number, precipitationType) {
         super(date, place, type, unit, number)
         this.precipitationType = precipitationType;
