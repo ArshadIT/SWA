@@ -14,12 +14,12 @@ function DataType(_type, _unit) {
 function WeatherData(number) {
     const value = () => number;
     let d= new Date();
-    let place =  "Aarhus";
+    let place;
     return Object.assign ({value},Event(d,place), DataType('Celcius','30'))
 }
 
 // wind 
-function wind(direction) {
+function Wind(direction) {
     const getDirection = () => direction;
     const convertToMPH = (unit) => ((unit / 1000)/1.6093)*3600;
     const convertToMS = (unit) => (((unit * 1.6093)*1000)/60)/60;
@@ -67,26 +67,32 @@ function WeatherPrediction(data){
 
 
 
-// function WeatherHistory(){ 
-//    const getCurrentPlace = () => data.
-//    return {getCurrentPlace}
-// }
+function WeatherHistory(data){ 
+   const getCurrentPlace = () => place;
+    return{getCurrentPlace}
+}
+
 
 //test
 let d= new Date();
 let place =  "Aarhus";
-const test = Event(d,place)
-const test2 = DataType('Celcius','30')
+const eventTest = Event(d,place)
+const dataType = DataType('Celcius','30')
 
-const test3 = WeatherData(123)
-console.log(test.place(), test.time())
-console.log(test2.type(), test2.unit())
-console.log(test3.time())
 
-const wind1 = wind('east');
-console.log(wind1.unit())
-console.log(wind1.convertToMPH(30))
-console.log(wind1.convertToMS(67))
+const weatherData = WeatherData(123)
+const weatherData2 = WeatherData(123)
+data =[weatherData,weatherData2]
+
+
+console.log(eventTest.place(), eventTest.time())
+console.log(weatherData.type(), weatherData.unit())
+console.log(weatherData.time())
+
+const wind = Wind('east');
+console.log(wind.unit())
+console.log(wind.convertToMPH(30))
+console.log(wind.convertToMS(67))
 
 const prec = Precipitation('high');
 console.log(prec.precipitationType())
@@ -97,7 +103,9 @@ const temp = Temperature();
 console.log(temp.convertToF(30))
 console.log(temp.convertToC(60))
 
-const test5 = WeatherPrediction()
-console.log(test5.matches(test3))
+const weatherPred = WeatherPrediction()
+console.log(weatherPred.matches(weatherData2))
 
+const weatherHis = WeatherHistory(data)
+console.log(weatherHis.getCurrentPlace())
 
