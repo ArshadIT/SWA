@@ -18,6 +18,17 @@ function WeatherData(number) {
     return Object.assign ({value},Event(d,place), DataType('Celcius','30'))
 }
 
+// wind 
+function wind(direction) {
+    const getDirection = () => direction;
+    const convertToMPH = (unit) => ((unit / 1000)/1.6093)*3600;
+    const convertToMS = (unit) => (((unit * 1.6093)*1000)/60)/60;
+    let number = 2;
+    return Object.assign ({getDirection, convertToMPH, convertToMS}, WeatherData(number))
+}
+
+
+//test
 let d= new Date();
 let place =  "Aarhus";
 const test = Event(d,place)
@@ -26,18 +37,13 @@ const test3 = WeatherData(123)
 console.log(test.place(), test.time())
 console.log(test2.type(), test2.unit())
 console.log(test3.time())
+const wind1 = wind('east');
+console.log(wind1.unit())
+console.log(wind1.convertToMPH(30))
+console.log(wind1.convertToMS(67))
 
-// wind 
-function wind(direction, mph, ms) {
-    const getDirection = () => direction;
-    const convertToMPH = () => ms;
-    const convertToMS = () => mph;
-return {
-    getDirection,
-    convertToMPH,
-    convertToMS
-}
-}
+
+
 // Temperature
 
 function temperature(far, cel){
