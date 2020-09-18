@@ -29,8 +29,12 @@ function WeatherData(number, date, place, type, unit) {
 // wind 
 function Wind(direction, number, date, place, type, unit) {
     const getDirection = () => direction;
-    const convertToMPH = (number) => ((number / 1000) / 1.6093) * 3600;
-    const convertToMS = (number) => (((number * 1.6093) * 1000) / 60) / 60;
+    function convertToMPH(){
+        return ((number / 1000) / 1.6093) * 3600;
+    }
+    function convertToMS(){
+        return (((number * 1.6093) * 1000) / 60) / 60;
+    }
     return Object.assign({
         getDirection,
         convertToMPH,
@@ -41,8 +45,8 @@ function Wind(direction, number, date, place, type, unit) {
 
 // Temperature
 function Temperature(number,  date, place, type, unit) {
-    const convertToF = (number) => number * 9 / 5 + 32;
-    const convertToC = (number) => (number - 32) * 5 / 9;
+    function convertToF(){ return number * 9 / 5 + 32;}
+    function convertToC(){ return (number - 32) * 5 / 9;}
     return Object.assign({
         convertToF,
         convertToC
@@ -53,8 +57,8 @@ function Temperature(number,  date, place, type, unit) {
 
 function Precipitation(type, number, date, place, type, unit) {
     const precipitationType = () => type;
-    const convertToInches = (number) => number * 25.4;
-    const convertToMM = (number) => number / 25.4;
+    function convertToInches(number){number * 25.4;}
+    function convertToMM(number){number / 25.4;}
     return Object.assign({
         precipitationType,
         convertToInches,
@@ -109,17 +113,17 @@ function WeatherHistory(weatherDataCollection) {
         for(i=0; i<weatherDataCollection.length; i++){
             if(weatherDataCollection[i].unit()==="C")
             {
-                weatherDataCollection[i].value().convertToF()
+                convertToF(weatherDataCollection[i].value())
                 weatherDataCollection[i].setUnit('F')
             }
             else if (weatherDataCollection[i].unit()==='MS')
             {
-                weatherDataCollection[i].value().convertToMPH()
+                convertToMPH(weatherDataCollection[i].value())
                 weatherDataCollection[i].setUnit('MPH')
             }
             else if(weatherDataCollection[i].unit()==='MM')
             {
-                weatherDataCollection[i].value().convertToInches()
+                convertToInches(weatherDataCollection[i].value())
                 weatherDataCollection[i].setUnit('Inches')
             }
         }
@@ -129,18 +133,18 @@ function WeatherHistory(weatherDataCollection) {
         for(i=0; i <weatherDataCollection.length; i++){
             if(weatherDataCollection[i].unit()==="F")
             {
-                weatherDataCollection[i].unit().convertToC()
+                convertToC(weatherDataCollection[i].value())
                 weatherDataCollection[i].setUnit('C')
 
             }
             else if (weatherDataCollection[i].unit()==='MPH')
             {
-                weatherDataCollection[i].unit().convertToMS()
+                convertToMS(weatherDataCollection[i].value())
                 weatherDataCollection[i].setUnit('MS')
             }
             else if(weatherDataCollection[i].unit()==='Inches')
             {
-                weatherDataCollection[i].unit().convertToMM()
+                convertToMM(weatherDataCollection[i].value())
                 weatherDataCollection[i].setUnit('MM')
             }
         }
@@ -167,19 +171,39 @@ function WeatherHistory(weatherDataCollection) {
 }
 
 // prediction
-function WeatherPrediction(data, place, type, unit) {
-    const matches = (WeatherData) => {
-        if (WeatherData.time === this.time) {
-            true;
-        } else {
-            false;
-        }
+function WeatherPrediction(data, _to, _from, place, type, unit) {
+    const matches = (data) => {
+        return (data.value() >= _from && d <= _to)
     };
-    const value = () => number;
+
+    const to = () => _to;
+    const from = () => _from;
+
     return Object.assign({
-        matches
+        matches, to, from
     }, Event(data, place), DataType(type, unit))
 }
+
+
+// temperature prediction
+function TemperaturePrediction(data, to, from, place, type, unit) {
+    function convertToF(to, from){
+        to * 9 / 5 + 32;
+        from * 9 / 5 + 32;
+        console.log('To: ' + to + 'From: ' + from);
+    }
+    function convertToC(to, from){
+        (to - 32) * 5 / 9;
+        (from - 32) * 5 / 9;
+        console.log('To: ' + to + 'From: ' + from);
+    }
+    return Object.assign({
+        convertToF,
+        convertToC
+    }, WeatherPrediction(data, to, from, place, type, unit))
+}
+
+
 
 //dateInterval test
 let dateFrom = new Date(2019, 04, 16);
@@ -190,19 +214,22 @@ const dint = DateInterval(dateFrom, dateTo)
 
 // weather history test
 const data1 = WeatherData(23, date, 'Århus', 'Sunny', 'C')
-const data2 = WeatherData(60, date, 'Horsens', 'Rain', 'F')
+const data2 = WeatherData(60, date, 'Horsens', 'Rain', 'C')
 const data3 = WeatherData(10, date, 'Viborg', 'Cloudy', 'MM')
 
 var dataCollection = [data1, data2, data3];
 
 const his = WeatherHistory(dataCollection)
-console.log(his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MPH')))
-console.log(his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MPH')))
- his.data()
+console.log(his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MS')))
+console.log(his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MM')))
+// console.log(his.convertToUSUnits())
+his.data()
 
 
 
-// const wind = Wind('east', 20 , date , 'Århus', 'Sunny', 'MPH');
+const temp = Temperature(20, date, 'Århus', 'Sunny', 'C');
+console.log(temp.convertToF())
+
 // const cloud = CloudCovarage(23 , date , 'Århus', 'Sunny', 'MPH');
 // console.log(cloud.value())
 // //test
