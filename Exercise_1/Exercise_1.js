@@ -67,10 +67,7 @@ function WeatherPrediction(data){
 
 
 
-// function WeatherHistory(){ 
-//    const getCurrentPlace = () => data.
-//    return {getCurrentPlace}
-// }
+
 
 //test
 let d= new Date();
