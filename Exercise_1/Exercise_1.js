@@ -106,7 +106,7 @@ function WeatherHistory(weatherDataCollection) {
         period = undefined
     };
     const convertToUSUnits = () => {
-        for(i=0; weatherDataCollection.length<i; i++){
+        for(i=0; i<weatherDataCollection.length; i++){
             if(weatherDataCollection[i].unit()==="C")
             {
                 weatherDataCollection[i].value().convertToF()
@@ -126,7 +126,7 @@ function WeatherHistory(weatherDataCollection) {
     };
 
     const convertToInternationalUnits = () => {
-        for(i=0; weatherDataCollection.length<i; i++){
+        for(i=0; i <weatherDataCollection.length; i++){
             if(weatherDataCollection[i].unit()==="F")
             {
                 weatherDataCollection[i].unit().convertToC()
@@ -147,11 +147,22 @@ function WeatherHistory(weatherDataCollection) {
     };
 
     const add = (data) => weatherDataCollection.push(data);
-    const data = () => weatherDataCollection;
+    function data(){
+        for( let i =0; i < weatherDataCollection.length; i++){
+     
+      console.log(` city ${weatherDataCollection[i].place()} 
+      date ${weatherDataCollection[i].time()}
+       type ${weatherDataCollection[i].type()} 
+       period ${weatherDataCollection[i].unit()}`)
+        }
+    } 
     
-    return {getCurrentPlace, setCurrentPlace, clearCurrentPlace, getCurrentType, 
-        setCurrentType, clearCurrentType, getCurrentPeriod, setCurrentPeriod, clearCurrentPeriod,
-        convertToUSUnits, convertToInternationalUnits, add, data
+    return {getCurrentPlace, setCurrentPlace, clearCurrentPlace, 
+        getCurrentType, 
+        setCurrentType, clearCurrentType, getCurrentPeriod, 
+        setCurrentPeriod, clearCurrentPeriod,
+        convertToUSUnits, convertToInternationalUnits,
+         add, data
     }
 }
 
@@ -187,7 +198,9 @@ var dataCollection = [data1, data2, data3];
 const his = WeatherHistory(dataCollection)
 console.log(his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MPH')))
 console.log(his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MPH')))
-console.log()
+ his.data()
+
+
 
 // const wind = Wind('east', 20 , date , 'Århus', 'Sunny', 'MPH');
 // const cloud = CloudCovarage(23 , date , 'Århus', 'Sunny', 'MPH');
