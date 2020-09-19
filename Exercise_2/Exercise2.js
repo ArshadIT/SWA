@@ -5,9 +5,7 @@ class WeatherEvent {
         this.type = type;
         this.unit = unit;
     }
-
-    
-}
+  }
 
 WeatherEvent.prototype.time = function(){
     return this.date;
@@ -45,7 +43,7 @@ DateInterval.prototype.contains = function(date){
     (date >= this.from && date <= this.to)
 }
 
-class WeatherData extends Events {
+class WeatherData extends WeatherEvent {
     constructor(number,  date, place, type, unit) {
         super(date, place, type, unit)
         this.number = number
@@ -198,7 +196,7 @@ WeatherHistory.prototype.convertToUSUnits = () => {
     }
 };
 
-class WeatherPrediction extends Events{
+class WeatherPrediction extends WeatherEvent{
     constructor(to, from, weatherDataCollection, date, place, type, unit){
         super(date, place, type, unit)
         this.to=to;
@@ -223,4 +221,4 @@ WeatherPrediction.prototype = {
 let date = new Date(2020, 04, 20)
 const eventw = new WeatherEvent(date, 'Århus', 'Sunny', 'C')
 const temp = new Temperature(10, date, 'Århus', 'Sunny', 'C')
-console.log(eventw.toString())
+console.log(temp.unit)
