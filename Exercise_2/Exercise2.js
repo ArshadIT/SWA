@@ -20,23 +20,26 @@ Event.prototype = {
         return this.unit;
     }
 }
-function DateIntervel(to, from){
-this.to = to;
-this.from = from;
-}
-DateInterval.prototype.from = {
-    from(){
-        return this.from;
+
+class DateIntervel {
+    construtor(to, from){
+        this.to = to;
+        this.from = from;
     }
 }
-DateInterval.prototype.to = {
-       to(){
+
+DateInterval.prototype = {
+    from(){
+        return this.from;
+    },
+    to(){
         return this.to;
-       } 
+       }, 
+    contains(date) {
+        return (date >= this.from && date <= this.to)
+    }
 }
-DateInterval.prototype.contains = function(date) {
-    return (date >= from && date <= to)
-}
+
 class WeatherData extends Event {
     constructor(date, place, type, unit, number) {
         super(date, place, type, unit)
@@ -97,13 +100,23 @@ Precipitation.prototype = {
     } 
 }
 
-function WeatherHistory(WeatherDataCollecion, place, type, unit, number, Precipitation, period){
-    this.WeatherDataCollecion = WeatherData;
+class CloudCovarage extends WeatherData {
+    constructor(date, place, type, unit, number) {
+        super(date, place, type, unit, number)
+    }
+}
+
+
+class WeatherHistory {
+    constructor(weatherDataCollection, place, type, period, unit, number, precipitation){
+    this.weatherDataCollection = weatherDataCollection;
     this.place = place;
     this.type = type;
+    this.period = period;
     this.unit = unit;
     this.number =  number;
-    this.Precipitation = Precipitation;
+    this.precipitation = Precipitation;
+    }
 }
 WeatherHistory.prototype.getCurrentPlace = function(){
     return this.place;
@@ -112,7 +125,7 @@ WeatherHistory.prototype.setCurrentPlace = function(newPlace){
     this.place = newPlace;
 } 
 WeatherHistory.prototype.clearCurrentPlace = function(){
-    this.place = 'undefined';
+    this.place = undefined;
 } 
 WeatherHistory.prototype.getCurrentType = function(){
     return this.type;
@@ -121,7 +134,7 @@ WeatherHistory.prototype.setCurrentType = function(newWeatherDataType){
     this.type = newWeatherDataType
 } 
 WeatherHistory.prototype.clearCurrentType = function(){
-    this.type = "undefind"
+    this.type = undefined;
 }
 WeatherHistory.prototype.getCurrentPeriod = function(){
     return this.period
@@ -130,10 +143,32 @@ WeatherHistory.prototype.setCurrentPeriod = function(newPeriod){
     this.period = newPeriod;
 } 
 WeatherHistory.prototype.clearCurrentPeriod = function(){
-    this.period = 'undefined'
+    this.period = undefined;
 }
 WeatherHistory.prototype.convertToUSUints = function(){
+    for(i=0; i <weatherDataCollection.length; i++){
+        if(weatherDataCollection[i].unit()==="F")
+        {
+            newValue = (weatherDataCollection[i].value() - 32) * 5 / 9;
+            weatherDataCollection[i].setValue(newValue);
+            weatherDataCollection[i].setUnit('C')
 
+        }
+        else if (weatherDataCollection[i].unit()==='MPH')
+        {
+            newValue = (((weatherDataCollection[i].value() * 1.6093) * 1000) / 60) / 60;
+            weatherDataCollection[i].setValue(newValue);
+            weatherDataCollection[i].setUnit('MS')
+        }
+        else if(weatherDataCollection[i].unit()==='Inches')
+        {
+            newValue = weatherDataCollection[i].value() / 25.4;
+            weatherDataCollection[i].setValue(newValue);
+            weatherDataCollection[i].setUnit('MM')
+        } else{
+            return undefined
+        }
+    }
 }
 WeatherHistory.prototype.convertToUSUnits = () => {
     for(i=0; i<weatherDataCollection.length; i++){
@@ -155,7 +190,29 @@ WeatherHistory.prototype.convertToUSUnits = () => {
             weatherDataCollection[i].setValue(newValue);
             weatherDataCollection[i].setUnit('Inches')
         }else{
-            return 'Undefined unit'
+            return undefined
         }
     }
 };
+
+class WeatherPrediction extends Event{
+    constructor(to, from, weatherDataCollection, date, place, type, unit){
+        super(date, place, type, unit)
+        this.to=to;
+        this.from=from;
+        this.weatherDataCollection=weatherDataCollection;
+    }
+}
+
+WeatherPrediction.prototype = {
+    to(){
+    this.to = to;},
+
+    from(){
+    this.from = from;    
+    }
+
+}
+let date = new Date(2020, 04, 20)
+const temp = Temperature(10, date, 'Århus', 'Sunny', 'C')
+console.log(temp.convertToF(), temp.value())
