@@ -56,10 +56,10 @@ function Temperature(number,  date, place, type, unit) {
 
 // precipitation
 
-function Precipitation(type, number, date, place, type, unit) {
-    const precipitationType = () => type;
-    function convertToInches(number){number * 25.4;}
-    function convertToMM(number){number / 25.4;}
+function Precipitation(precType, number, date, place, type, unit) {
+    const precipitationType = () => precType;
+    function convertToInches(){ return number * 25.4;}
+    function convertToMM(){ return number / 25.4;}
     return Object.assign({
         precipitationType,
         convertToInches,
@@ -162,7 +162,8 @@ function WeatherHistory(weatherDataCollection) {
      
       console.log(` city ${weatherDataCollection[i].place()} 
       date ${weatherDataCollection[i].time()}
-       type ${weatherDataCollection[i].type()} 
+       type ${weatherDataCollection[i].type()}
+       value ${weatherDataCollection[i].value()}  
        unit ${weatherDataCollection[i].unit()}`)
         }
     } 
@@ -177,9 +178,9 @@ function WeatherHistory(weatherDataCollection) {
 }
 
 // prediction
-function WeatherPrediction(data, _to, _from, place, type, unit) {
+function WeatherPrediction(weatherData, _to, _from, place, type, unit) {
     const matches = (data) => {
-        return (data.value() >= _from && data.value() <= _to)
+        return (data >= _from && data <= _to)
     };
 
     const to = () => _to;
@@ -189,7 +190,7 @@ function WeatherPrediction(data, _to, _from, place, type, unit) {
 
     return Object.assign({
         matches, to, from, setTo, setFrom
-    }, Event(data, place), DataType(type, unit))
+    }, Event(weatherData, place), DataType(type, unit))
 }
 
 
@@ -212,10 +213,10 @@ function TemperaturePrediction(data, to, from, place, type, unit) {
 }
 
 // Precipitation prediction
-function PrecipitationPrediction(types, data, to, from, place, type, unit) {
+function PrecipitationPrediction(types, weatherData, to, from, place, type, unit) {
     const Types = () => types;
     const matches = (data) => {
-        return (data.value() >= from && data.value() <= to)
+        return (data >= from && data <= to)
     };
     function convertToInches(){
         to=to * 25.4;
@@ -231,14 +232,14 @@ function PrecipitationPrediction(types, data, to, from, place, type, unit) {
         Types, matches,
         convertToInches,
         convertToMM
-    }, WeatherPrediction(data, to, from, place, type, unit))
+    }, WeatherPrediction(weatherData, to, from, place, type, unit))
 }
 
 // wind prediction 
-function WindPrediction(windDirections, data, to, from, place, type, unit) {
+function WindPrediction(windDirections, weatherData, to, from, place, type, unit) {
     const directions = () => windDirections;
     const matches = (data) => {
-        return (data.value() >= from && data.value() <= to)
+        return (data>= from && data <= to)
     };
     function convertToMPH(){
         to=((to / 1000) / 1.6093) * 3600;
@@ -254,17 +255,17 @@ function WindPrediction(windDirections, data, to, from, place, type, unit) {
         directions, matches,
         convertToMPH,
         convertToMS
-    }, WeatherPrediction(data, to, from, place, type, unit))
+    }, WeatherPrediction(weatherData, to, from, place, type, unit))
 }
 
 // cloud covarage prediction
-function CloudCovaragePrediction(data, to, from, place, type, unit) {
+function CloudCovaragePrediction(weatherData, to, from, place, type, unit) {
     const matches = (data) => {
-        return (data.value() >= from && data.value() <= to)
+        return (data >= from && data <= to)
     };
     return Object.assign({
         matches
-    }, WeatherPrediction(data, to, from, place, type, unit))
+    }, WeatherPrediction(weatherData, to, from, place, type, unit))
 }
 
 // weather forecast
@@ -366,15 +367,12 @@ function WeatherForecast(weatherDataCollection) {
     }
 }
 
-
-
-
 //dateInterval test
 let dateFrom = new Date(2019, 04, 16);
 let dateTo = new Date();
-let date = new Date(2020, 10, 16)
+let date = new Date(2020, 04, 20)
 const dint = DateInterval(dateFrom, dateTo)
-// console.log(dint.contains(date))
+console.log(dint.contains(date))
 
 // weather history test
 const data1 = WeatherData(23, date, 'Århus', 'Sunny', 'C')
@@ -384,50 +382,51 @@ const data3 = WeatherData(10, date, 'Viborg', 'Cloudy', 'MM')
 var dataCollection = [data1, data2, data3];
 
 const his = WeatherHistory(dataCollection)
-console.log(his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MS')))
-console.log(his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MM')))
-// console.log(his.convertToUSUnits())
+his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MS'))
+his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MM'))
+his.convertToUSUnits()
 his.data()
 
+// weather forcast test
+const forecast1 = WeatherPrediction(data1, 29, 33, 'Århus', 'Sunny', 'C')
+const forecast2 = WeatherPrediction(data2, 10, 15, 'Horsens', 'Rain', 'C')
+const forecast3 = WeatherPrediction(data3, 12, 17, 'Viborg', 'Cloudy', 'MM')
+
+var forecastCollection = [forecast1, forecast2, forecast3];
+
+const forecast = WeatherForecast(forecastCollection)
+forecast.add(WeatherPrediction(data3, -4, 3, 'Viborg', 'Snow', 'MM'))
+forecast.convertToUSUnits()
+forecast.data()
 
 
-const temp = TemperaturePrediction(data1,4, 10, 'Århus', 'Sunny', 'C');
-console.log(temp.convertToF(), temp.to())
+// temperature test
+const temp = Temperature(10, date, 'Århus', 'Sunny', 'C')
+console.log(temp.convertToF(), temp.value())
 
-// const cloud = CloudCovarage(23 , date , 'Århus', 'Sunny', 'MPH');
-// console.log(cloud.value())
-// //test
-// let d = new Date();
-// let place = "Aarhus";
-// const eventTest = Event(d, place)
-// const dataType = DataType('Celcius', '30')
+const tempPred = TemperaturePrediction(data1,4, 10, 'Århus', 'Sunny', 'C');
+console.log(tempPred.matches(5))
+console.log(tempPred.convertToF(), tempPred.to(), tempPred.from())
 
+// precipitation test
+const pre = Precipitation('High',100, date, 'Århus', 'Rain', 'MM')
+console.log(pre.convertToInches(), pre.value())
 
-// const weatherData = WeatherData(123)
-// const weatherData2 = WeatherData(123)
-// data = [weatherData, weatherData2]
+const prePred = PrecipitationPrediction('High', data2, 90, 120,'Århus', 'Rain', 'MM')
+console.log(prePred.matches(80))
+console.log(prePred.convertToInches(), prePred.to(), prePred.from())
 
+// wind test
+const wind = Wind('east', 26, date, 'Århus', 'Rain', 'MS')
+console.log(wind.convertToMPH(), wind.value())
 
-// console.log(eventTest.place(), eventTest.time())
-// console.log(weatherData.type(), weatherData.unit())
-// console.log(weatherData.time())
+const windPred = WindPrediction(data3 ,26, 29, 'Århus', 'Rain', 'MS')
+console.log(windPred.matches(26))
+console.log(windPred.convertToMPH(), windPred.to(), windPred.from())
 
-// const wind = Wind('east');
-// console.log(wind.unit())
-// console.log(wind.convertToMPH(30))
-// console.log(wind.convertToMS(67))
+// cloud covarage test
+const cloud = CloudCovarage(0.68 , date , 'Århus', 'Sunny', 'Clouds');
+console.log(cloud.value())
 
-// const prec = Precipitation('high');
-// console.log(prec.precipitationType())
-// console.log(prec.convertToInches(10))
-// console.log(prec.convertToMM(100))
-
-// const temp = Temperature();
-// console.log(temp.convertToF(30))
-// console.log(temp.convertToC(60))
-
-// const weatherPred = WeatherPrediction()
-// console.log(weatherPred.matches(weatherData2))
-
-// const weatherHis = WeatherHistory(data)
-// console.log(weatherHis.getCurrentPlace())
+const cloudPred = CloudCovaragePrediction(data1, 0.68 , 0.72, 'Århus', 'Sunny', 'Clouds');
+console.log(cloudPred.to(), cloudPred.from(), cloudPred.matches(0.70))
