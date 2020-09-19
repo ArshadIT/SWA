@@ -24,6 +24,19 @@ function DateIntervel(to, from){
 this.to = to;
 this.from = from;
 }
+DateInterval.prototype.from = {
+    from(){
+        return this.from;
+    }
+}
+DateInterval.prototype.to = {
+       to(){
+        return this.to;
+       } 
+}
+DateInterval.prototype.contains = function(date) {
+    return (date >= from && date <= to)
+}
 class WeatherData extends Event {
     constructor(date, place, type, unit, number) {
         super(date, place, type, unit)
@@ -118,4 +131,7 @@ WeatherHistory.prototype.setCurrentPeriod = function(newPeriod){
 } 
 WeatherHistory.prototype.clearCurrentPeriod = function(){
     this.period = 'undefined'
+}
+WeatherHistory.prototype.convertToUSUints = function(){
+
 }
