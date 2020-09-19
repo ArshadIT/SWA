@@ -163,7 +163,7 @@ function WeatherHistory(weatherDataCollection) {
       console.log(` city ${weatherDataCollection[i].place()} 
       date ${weatherDataCollection[i].time()}
        type ${weatherDataCollection[i].type()} 
-       period ${weatherDataCollection[i].unit()}`)
+       unit ${weatherDataCollection[i].unit()}`)
         }
     } 
     
@@ -286,20 +286,26 @@ function WeatherForecast(weatherDataCollection) {
         for(i=0; i<weatherDataCollection.length; i++){
             if(weatherDataCollection[i].unit()==="C")
             {
-                newValue = weatherDataCollection[i].value()* 9 / 5 + 32;
-                weatherDataCollection[i].setValue(newValue);
+                newTo = weatherDataCollection[i].to()* 9 / 5 + 32;
+                newFrom = weatherDataCollection[i].from()* 9 / 5 + 32;
+                weatherDataCollection[i].setTo(newTo);
+                weatherDataCollection[i].setFrom(newFrom);
                 weatherDataCollection[i].setUnit('F')
             } 
             else if (weatherDataCollection[i].unit()==='MS')
             { 
-                newValue = ((weatherDataCollection[i].value()  / 1000) / 1.6093) * 3600;
-                weatherDataCollection[i].setValue(newValue);
+                newTo = ((weatherDataCollection[i].to()  / 1000) / 1.6093) * 3600;
+                newFrom = ((weatherDataCollection[i].from()  / 1000) / 1.6093) * 3600;
+                weatherDataCollection[i].setTo(newTo);
+                weatherDataCollection[i].setFrom(newFrom);
                 weatherDataCollection[i].setUnit('MPH')
             }
             else if(weatherDataCollection[i].unit()==='MM')
             {
-                newValue = weatherDataCollection[i].value() * 25.4;
-                weatherDataCollection[i].setValue(newValue);
+                newTo = weatherDataCollection[i].to() * 25.4;
+                newFrom = weatherDataCollection[i].from() * 25.4;
+                weatherDataCollection[i].setTo(newTo);
+                weatherDataCollection[i].setFrom(newFrom);
                 weatherDataCollection[i].setUnit('Inches')
             }else{
                 return 'Undefined unit'
@@ -311,21 +317,27 @@ function WeatherForecast(weatherDataCollection) {
         for(i=0; i <weatherDataCollection.length; i++){
             if(weatherDataCollection[i].unit()==="F")
             {
-                newValue = (weatherDataCollection[i].value() - 32) * 5 / 9;
-                weatherDataCollection[i].setValue(newValue);
+                newTo = (weatherDataCollection[i].to() - 32) * 5 / 9;
+                newFrom = (weatherDataCollection[i].from() - 32) * 5 / 9;
+                weatherDataCollection[i].setTo(newTo);
+                weatherDataCollection[i].setFrom(newFrom);
                 weatherDataCollection[i].setUnit('C')
 
             }
             else if (weatherDataCollection[i].unit()==='MPH')
             {
-                newValue = (((weatherDataCollection[i].value() * 1.6093) * 1000) / 60) / 60;
-                weatherDataCollection[i].setValue(newValue);
+                newTo = (((weatherDataCollection[i].to() * 1.6093) * 1000) / 60) / 60;
+                newFrom = (((weatherDataCollection[i].from() * 1.6093) * 1000) / 60) / 60;
+                weatherDataCollection[i].setTo(newTo);
+                weatherDataCollection[i].setFrom(newFrom);
                 weatherDataCollection[i].setUnit('MS')
             }
             else if(weatherDataCollection[i].unit()==='Inches')
             {
-                newValue = weatherDataCollection[i].value() / 25.4;
-                weatherDataCollection[i].setValue(newValue);
+                newTo = weatherDataCollection[i].to() / 25.4;
+                newFrom = weatherDataCollection[i].from() / 25.4;
+                weatherDataCollection[i].setTo(newTo);
+                weatherDataCollection[i].setFrom(newFrom);
                 weatherDataCollection[i].setUnit('MM')
             } else{
                 return 'Undefined unit'
@@ -338,9 +350,10 @@ function WeatherForecast(weatherDataCollection) {
         for( let i =0; i < weatherDataCollection.length; i++){
      
       console.log(` city ${weatherDataCollection[i].place()} 
-      date ${weatherDataCollection[i].time()}
-       type ${weatherDataCollection[i].type()} 
-       period ${weatherDataCollection[i].unit()}`)
+        to ${weatherDataCollection[i].to()}
+        from ${weatherDataCollection[i].from()}
+        type ${weatherDataCollection[i].type()} 
+        unit ${weatherDataCollection[i].unit()}`)
         }
     } 
     
