@@ -1,56 +1,60 @@
-class Event {
+class WeatherEvent {
     constructor(date, place, type, unit) {
         this.date = date;
         this.place = place;
         this.type = type;
         this.unit = unit;
     }
-}
-Event.prototype = {
-    time() {
-        return this.date;
-    },
-    place() {
-        return this.place;
-    },
-    type() {
-        return this.type;
-    },
-    unit() {
-        return this.unit;
-    }
+
+    
 }
 
+WeatherEvent.prototype.time = function(){
+    return this.date;
+}
+
+WeatherEvent.prototype.place = function(){
+    return this.place;
+}
+
+WeatherEvent.prototype.type = function(){
+    return this.type;
+}
+
+WeatherEvent.prototype.unit = function(){
+    return this.unit;
+}
+
+
 class DateInterval {
-    construtor(to, from){
+    constructor(to, from){
         this.to = to;
         this.from = from;
     }
 }
 
-DateInterval.prototype = {
-    from(){
-        return this.from;
-    },
-    to(){
-        return this.to;
-       }, 
-    contains(date) {
-        return (date >= this.from && date <= this.to)
-    }
+DateInterval.prototype.to = function(){
+    return this.to;
 }
 
-class WeatherData extends Event {
+DateInterval.prototype.from = function(){
+    return this.from;
+}
+
+DateInterval.prototype.contains = function(date){
+    (date >= this.from && date <= this.to)
+}
+
+class WeatherData extends Events {
     constructor(number,  date, place, type, unit) {
         super(date, place, type, unit)
         this.number = number
     }
 }
 
-WeatherData.prototype = {
-    value() {
+
+WeatherData.prototype.value = function(){
         return this.number
-    }
 }
 
 class Temperature extends WeatherData {
@@ -61,18 +65,10 @@ class Temperature extends WeatherData {
 Temperature.prototype.convertToF= function(){
    return this.type*9/5 +32;
 }
-Temperature.prototype.value= function(){
-    return this.number;
- }
 
-// Temperature.prototype = {
-//     convertToF() {
-//         this.type * 9/5 + 32
-//     },
-//     convertToC() {
-//         (this.type - 32) * 5/9
-//     } 
-// }
+Temperature.prototype.convertToF= function(){
+    return (this.type - 32) * 5/9;
+}
 
 class Wind extends WeatherData {
     constructor(date, place, type, unit, number, direction) {
@@ -81,13 +77,16 @@ class Wind extends WeatherData {
     }
 }
 
-Wind.prototype = {
-    convertToMPH() {
-        ((this.unit / 1000)/1.6093)*3600
-    },
-    convertToMS() {
-        (((this.unit * 1.6093)*1000)/60)/60
-    } 
+Wind.prototype.direction= function(){
+    return this.direction
+}
+
+Wind.prototype.convertToMPH= function(){
+    return ((this.unit / 1000)/1.6093)*3600
+ }
+ 
+Wind.prototype.convertToMS= function(){
+    return (((this.unit * 1.6093)*1000)/60)/60
 }
 
 class Precipitation extends WeatherData {
@@ -97,13 +96,12 @@ class Precipitation extends WeatherData {
     }
 }
 
-Precipitation.prototype = {
-    convertToInches() {
-        this.unit * 25.4
-    },
-    convertToMM() {
-        this.unit / 25.4
-    } 
+Precipitation.prototype.convertToInches= function(){
+    return this.unit * 25.4
+}
+
+Precipitation.prototype.convertToMM= function(){
+    return this.unit / 25.4
 }
 
 class CloudCovarage extends WeatherData {
@@ -111,7 +109,6 @@ class CloudCovarage extends WeatherData {
         super(date, place, type, unit, number)
     }
 }
-
 
 class WeatherHistory {
     constructor(weatherDataCollection, place, type, period, unit, number, precipitation){
@@ -201,7 +198,7 @@ WeatherHistory.prototype.convertToUSUnits = () => {
     }
 };
 
-class WeatherPrediction extends Event{
+class WeatherPrediction extends Events{
     constructor(to, from, weatherDataCollection, date, place, type, unit){
         super(date, place, type, unit)
         this.to=to;
@@ -219,6 +216,11 @@ WeatherPrediction.prototype = {
     }
 
 }
+
+
+
+
 let date = new Date(2020, 04, 20)
+const eventw = new WeatherEvent(date, 'Århus', 'Sunny', 'C')
 const temp = new Temperature(10, date, 'Århus', 'Sunny', 'C')
-console.log(temp.convertToF(), temp.value())
+console.log(eventw.toString())
