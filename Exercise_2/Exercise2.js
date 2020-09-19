@@ -83,3 +83,39 @@ Precipitation.prototype = {
         this.unit / 25.4
     } 
 }
+
+function WeatherHistory(WeatherDataCollecion, place, type, unit, number, Precipitation, period){
+    this.WeatherDataCollecion = WeatherData;
+    this.place = place;
+    this.type = type;
+    this.unit = unit;
+    this.number =  number;
+    this.Precipitation = Precipitation;
+}
+WeatherHistory.prototype.getCurrentPlace = function(){
+    return this.place;
+} 
+WeatherHistory.prototype.setCurrentPlace = function(newPlace){
+    this.place = newPlace;
+} 
+WeatherHistory.prototype.clearCurrentPlace = function(){
+    this.place = 'undefined';
+} 
+WeatherHistory.prototype.getCurrentType = function(){
+    return this.type;
+}
+WeatherHistory.prototype.setCurrentType = function(newWeatherDataType){
+    this.type = newWeatherDataType
+} 
+WeatherHistory.prototype.clearCurrentType = function(){
+    this.type = "undefind"
+}
+WeatherHistory.prototype.getCurrentPeriod = function(){
+    return this.period
+}
+WeatherHistory.prototype.setCurrentPeriod = function(newPeriod){
+    this.period = newPeriod;
+} 
+WeatherHistory.prototype.clearCurrentPeriod = function(){
+    this.period = 'undefined'
+}
