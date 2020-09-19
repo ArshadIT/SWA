@@ -135,3 +135,27 @@ WeatherHistory.prototype.clearCurrentPeriod = function(){
 WeatherHistory.prototype.convertToUSUints = function(){
 
 }
+WeatherHistory.prototype.convertToUSUnits = () => {
+    for(i=0; i<weatherDataCollection.length; i++){
+        if(weatherDataCollection[i].unit()==="C")
+        {
+            newValue = weatherDataCollection[i].value()* 9 / 5 + 32;
+            weatherDataCollection[i].setValue(newValue);
+            weatherDataCollection[i].setUnit('F')
+        }
+        else if (weatherDataCollection[i].unit()==='MS')
+        {
+            newValue = ((weatherDataCollection[i].value()  / 1000) / 1.6093) * 3600;
+            weatherDataCollection[i].setValue(newValue);
+            weatherDataCollection[i].setUnit('MPH')
+        }
+        else if(weatherDataCollection[i].unit()==='MM')
+        {
+            newValue = weatherDataCollection[i].value() * 25.4;
+            weatherDataCollection[i].setValue(newValue);
+            weatherDataCollection[i].setUnit('Inches')
+        }else{
+            return 'Undefined unit'
+        }
+    }
+};
