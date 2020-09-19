@@ -227,7 +227,7 @@ his.data()
 
 
 
-const temp = Temperature(20, date, 'Århus', 'Sunny', 'C');
+const temp = TemperaturePrediction(20, date, 'Århus', 'Sunny', 'C');
 console.log(temp.convertToF())
 
 // const cloud = CloudCovarage(23 , date , 'Århus', 'Sunny', 'MPH');

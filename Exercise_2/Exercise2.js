@@ -20,7 +20,10 @@ Event.prototype = {
         return this.unit;
     }
 }
-
+function DateIntervel(to, from){
+this.to = to;
+this.from = from;
+}
 class WeatherData extends Event {
     constructor(date, place, type, unit, number) {
         super(date, place, type, unit)
