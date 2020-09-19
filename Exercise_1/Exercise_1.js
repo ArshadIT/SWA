@@ -162,7 +162,8 @@ function WeatherHistory(weatherDataCollection) {
      
       console.log(` city ${weatherDataCollection[i].place()} 
       date ${weatherDataCollection[i].time()}
-       type ${weatherDataCollection[i].type()} 
+       type ${weatherDataCollection[i].type()}
+       value ${weatherDataCollection[i].value()}  
        unit ${weatherDataCollection[i].unit()}`)
         }
     } 
@@ -366,15 +367,12 @@ function WeatherForecast(weatherDataCollection) {
     }
 }
 
-
-
-
 //dateInterval test
 let dateFrom = new Date(2019, 04, 16);
 let dateTo = new Date();
 let date = new Date(2020, 10, 16)
 const dint = DateInterval(dateFrom, dateTo)
-// console.log(dint.contains(date))
+console.log(dint.contains(date))
 
 // weather history test
 const data1 = WeatherData(23, date, 'Århus', 'Sunny', 'C')
@@ -384,15 +382,26 @@ const data3 = WeatherData(10, date, 'Viborg', 'Cloudy', 'MM')
 var dataCollection = [data1, data2, data3];
 
 const his = WeatherHistory(dataCollection)
-console.log(his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MS')))
-console.log(his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MM')))
-// console.log(his.convertToUSUnits())
+his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MS'))
+his.add(WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MM'))
+his.convertToUSUnits()
 his.data()
 
+// weather forcast test
+const forecast1 = WeatherPrediction(data1, 29, 33, 'Århus', 'Sunny', 'C')
+const forecast2 = WeatherPrediction(data2, 10, 15, 'Horsens', 'Rain', 'C')
+const forecast3 = WeatherPrediction(data3, 12, 17, 'Viborg', 'Cloudy', 'MM')
+
+var forecastCollection = [forecast1, forecast2, forecast3];
+
+const forecast = WeatherForecast(forecastCollection)
+forecast.add(WeatherPrediction(data3, -4, 3, 'Viborg', 'Snow', 'MM'))
+forecast.convertToUSUnits()
+forecast.data()
 
 
-const temp = TemperaturePrediction(data1,4, 10, 'Århus', 'Sunny', 'C');
-console.log(temp.convertToF(), temp.to())
+// const temp = TemperaturePrediction(data1,4, 10, 'Århus', 'Sunny', 'C');
+// console.log(temp.convertToF(), temp.to())
 
 // const cloud = CloudCovarage(23 , date , 'Århus', 'Sunny', 'MPH');
 // console.log(cloud.value())
@@ -425,9 +434,3 @@ console.log(temp.convertToF(), temp.to())
 // const temp = Temperature();
 // console.log(temp.convertToF(30))
 // console.log(temp.convertToC(60))
-
-// const weatherPred = WeatherPrediction()
-// console.log(weatherPred.matches(weatherData2))
-
-// const weatherHis = WeatherHistory(data)
-// console.log(weatherHis.getCurrentPlace())
