@@ -21,7 +21,7 @@ Event.prototype = {
     }
 }
 
-class DateIntervel {
+class DateInterval {
     construtor(to, from){
         this.to = to;
         this.from = from;
@@ -41,7 +41,7 @@ DateInterval.prototype = {
 }
 
 class WeatherData extends Event {
-    constructor(date, place, type, unit, number) {
+    constructor(number,  date, place, type, unit) {
         super(date, place, type, unit)
         this.number = number
     }
@@ -53,20 +53,26 @@ WeatherData.prototype = {
     }
 }
 
-class Temperatur extends WeatherData {
-    constructor(date, place, type, unit, number) {
-        super(date, place, type, unit, number)
+class Temperature extends WeatherData {
+    constructor(number,  date, place, type, unit) {
+        super(number,  date, place, type, unit)
     }
 }
-
-Temperatur.prototype = {
-    convertToF() {
-        this.type * 9/5 + 32
-    },
-    convertToC() {
-        (this.type - 32) * 5/9
-    } 
+Temperature.prototype.convertToF= function(){
+   return this.type*9/5 +32;
 }
+Temperature.prototype.value= function(){
+    return this.number;
+ }
+
+// Temperature.prototype = {
+//     convertToF() {
+//         this.type * 9/5 + 32
+//     },
+//     convertToC() {
+//         (this.type - 32) * 5/9
+//     } 
+// }
 
 class Wind extends WeatherData {
     constructor(date, place, type, unit, number, direction) {
@@ -214,5 +220,5 @@ WeatherPrediction.prototype = {
 
 }
 let date = new Date(2020, 04, 20)
-const temp = Temperature(10, date, 'Århus', 'Sunny', 'C')
+const temp = new Temperature(10, date, 'Århus', 'Sunny', 'C')
 console.log(temp.convertToF(), temp.value())
