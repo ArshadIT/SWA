@@ -109,14 +109,11 @@ class CloudCovarage extends WeatherData {
 }
 
 class WeatherHistory {
-    constructor(weatherDataCollection, place, type, period, unit, number, precipitation){
+    constructor(weatherDataCollection){
     this.weatherDataCollection = weatherDataCollection;
-    this.place = place;
-    this.type = type;
-    this.period = period;
-    this.unit = unit;
-    this.number =  number;
-    this.precipitation = precipitation;
+    this.place;
+    this.type;
+    this.period;
     }
 }
 WeatherHistory.prototype.getCurrentPlace = function(){
@@ -195,6 +192,10 @@ WeatherHistory.prototype.convertToUSUnits = () => {
         }
     }
 };
+
+WeatherHistory.prototype.add = (data) => {
+    this.weatherDataCollection.push(data);
+}
 
 class WeatherPrediction extends WeatherEvent{
     constructor(to, from, place, type, unit){
@@ -407,7 +408,9 @@ WeatherForecast.prototype.convertToUSUnits = () => {
     }
 };
 
-
+WeatherForecast.prototype.add = (data) => {
+    weatherDataCollection.push(data);
+}
 // const eventw = new WeatherEvent(date, 'Århus', 'Sunny', 'C')
 // const temp = new Temperature(10, date, 'Århus', 'Sunny', 'C')
 // console.log(temp.unit, temp.value())
@@ -460,18 +463,19 @@ console.log(dint.contains(date))
 
 
 
-// // weather history test
-// const data1 = new WeatherData(23, date, 'Århus', 'Sunny', 'C')
-// const data2 = new WeatherData(60, date, 'Horsens', 'Rain', 'C')
-// const data3 = new WeatherData(10, date, 'Viborg', 'Cloudy', 'MM')
+// weather history test
+const data1 = new WeatherData(23, date, 'Århus', 'Sunny', 'C')
+const data2 = new WeatherData(60, date, 'Horsens', 'Rain', 'C')
+const data3 = new WeatherData(10, date, 'Viborg', 'Cloudy', 'MM')
 
-// var dataCollection = [data1, data2, data3];
+var dataCollection = [data1, data2, data3];
 
-// const his = new WeatherHistory(dataCollection)
-// // his.add(new WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MS'))
-// // his.add(new WeatherData(12, date, his.setCurrentPlace('Århus'), his.setCurrentType('Sunny'), 'MM'))
-// his.convertToUSUnits()
-// his.data()
+const his = new WeatherHistory(dataCollection)
+console.log(dataCollection.push(data1), dataCollection.length)
+his.add(data1)
+his.add(data2)
+his.convertToUSUnits()
+his.data()
 
 // // weather forcast test
 // const forecast1 = WeatherPrediction(data1, 29, 33, 'Århus', 'Sunny', 'C')

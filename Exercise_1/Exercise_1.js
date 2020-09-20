@@ -382,10 +382,9 @@ let date = new Date(2020, 04, 20)
 const dint = DateInterval(dateFrom, dateTo)
 console.log(dint.contains(date))
 
-// weather history test
-const data1 = WeatherData(23, date, 'Århus', 'Sunny', 'C')
-const data2 = WeatherData(60, date, 'Horsens', 'Rain', 'C')
-const data3 = WeatherData(10, date, 'Viborg', 'Cloudy', 'MM')
+const data1 = new WeatherData(23, date, 'Århus', 'Sunny', 'C')
+const data2 = new WeatherData(60, date, 'Horsens', 'Rain', 'C')
+const data3 = new WeatherData(10, date, 'Viborg', 'Cloudy', 'MM')
 
 var dataCollection = [data1, data2, data3];
 
@@ -412,29 +411,37 @@ forecast.data()
 const temp = Temperature(10, date, 'Århus', 'Sunny', 'C')
 console.log(temp.convertToF(), temp.value())
 
+const tempData = WeatherData(23, date, 'Århus', 'Sunny', 'C')
+
 const tempPred = TemperaturePrediction(date,4, 10, 'Århus', 'Sunny', 'C');
-console.log(tempPred.matches(5))
+console.log(tempPred.matches(tempData))
 console.log(tempPred.convertToF(), tempPred.to(), tempPred.from())
 
 // precipitation test
 const pre = Precipitation('High',100, date, 'Århus', 'Rain', 'MM')
 console.log(pre.convertToInches(), pre.value())
 
+const preData = WeatherData(60, date, 'Horsens', 'Rain', 'MM')
+
 const prePred = PrecipitationPrediction('High', date, 90, 120,'Århus', 'Rain', 'MM')
-console.log(prePred.matches(80))
+console.log(prePred.matches(preData))
 console.log(prePred.convertToInches(), prePred.to(), prePred.from())
 
 // wind test
 const wind = Wind('east', 26, date, 'Århus', 'Rain', 'MS')
 console.log(wind.convertToMPH(), wind.value())
 
+const windData = WeatherData(27, date, 'Horsens', 'Windy', 'MS')
+
 const windPred = WindPrediction('east',date ,26, 29, 'Århus', 'Rain', 'MS')
-console.log(windPred.matches(26))
+console.log(windPred.matches(windData))
 console.log(windPred.convertToMPH(), windPred.to(), windPred.from())
 
 // cloud covarage test
 const cloud = CloudCovarage(0.68 , date , 'Århus', 'Sunny', 'Clouds');
 console.log(cloud.value())
 
+const CloudData = WeatherData(10, date, 'Viborg', 'Cloudy', 'Clouds')
+
 const cloudPred = CloudCovaragePrediction(date, 0.68 , 0.72, 'Århus', 'Sunny', 'Clouds');
-console.log(cloudPred.to(), cloudPred.from(), cloudPred.matches(0.70))
+console.log(cloudPred.to(), cloudPred.from(), cloudPred.matches(CloudData))
