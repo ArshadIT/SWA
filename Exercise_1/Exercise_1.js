@@ -178,9 +178,11 @@ function WeatherHistory(weatherDataCollection) {
 }
 
 // prediction
-function WeatherPrediction(weatherData, _to, _from, place, type, unit) {
+function WeatherPrediction(date, _to, _from, place, type, unit) {
     const matches = (data) => {
-        return (data >= _from && data <= _to)
+        return (data.value()>=this.to && data.value()<=this.from 
+            && data.type===this.type && data.place===this.place
+            && data.unit===this.unit);
     };
 
     const to = () => _to;
@@ -190,12 +192,12 @@ function WeatherPrediction(weatherData, _to, _from, place, type, unit) {
 
     return Object.assign({
         matches, to, from, setTo, setFrom
-    }, Event(weatherData, place), DataType(type, unit))
+    }, Event(date, place), DataType(type, unit))
 }
 
 
 // temperature prediction
-function TemperaturePrediction(data, to, from, place, type, unit) {
+function TemperaturePrediction(date, to, from, place, type, unit) {
     function convertToF(){
         to=to * 9 / 5 + 32;
         from=from * 9 / 5 + 32;
@@ -209,14 +211,16 @@ function TemperaturePrediction(data, to, from, place, type, unit) {
     return Object.assign({
         convertToF,
         convertToC
-    }, WeatherPrediction(data, to, from, place, type, unit))
+    }, WeatherPrediction(date, to, from, place, type, unit))
 }
 
 // Precipitation prediction
-function PrecipitationPrediction(types, weatherData, to, from, place, type, unit) {
+function PrecipitationPrediction(types, date, to, from, place, type, unit) {
     const Types = () => types;
     const matches = (data) => {
-        return (data >= from && data <= to)
+        return (data.value()>=this.to && data.value()<=this.from 
+            && data.type===this.type && data.place===this.place
+            && data.unit===this.unit);
     };
     function convertToInches(){
         to=to * 25.4;
@@ -232,14 +236,16 @@ function PrecipitationPrediction(types, weatherData, to, from, place, type, unit
         Types, matches,
         convertToInches,
         convertToMM
-    }, WeatherPrediction(weatherData, to, from, place, type, unit))
+    }, WeatherPrediction(date, to, from, place, type, unit))
 }
 
 // wind prediction 
-function WindPrediction(windDirections, weatherData, to, from, place, type, unit) {
+function WindPrediction(windDirections, date, to, from, place, type, unit) {
     const directions = () => windDirections;
     const matches = (data) => {
-        return (data>= from && data <= to)
+        return (data.value()>=this.to && data.value()<=this.from 
+            && data.type===this.type && data.place===this.place
+            && data.unit===this.unit);
     };
     function convertToMPH(){
         to=((to / 1000) / 1.6093) * 3600;
@@ -255,17 +261,19 @@ function WindPrediction(windDirections, weatherData, to, from, place, type, unit
         directions, matches,
         convertToMPH,
         convertToMS
-    }, WeatherPrediction(weatherData, to, from, place, type, unit))
+    }, WeatherPrediction(date, to, from, place, type, unit))
 }
 
 // cloud covarage prediction
-function CloudCovaragePrediction(weatherData, to, from, place, type, unit) {
+function CloudCovaragePrediction(date, to, from, place, type, unit) {
     const matches = (data) => {
-        return (data >= from && data <= to)
+        return (data.value()>=this.to && data.value()<=this.from 
+            && data.type===this.type && data.place===this.place
+            && data.unit===this.unit);
     };
     return Object.assign({
         matches
-    }, WeatherPrediction(weatherData, to, from, place, type, unit))
+    }, WeatherPrediction(date, to, from, place, type, unit))
 }
 
 // weather forecast
@@ -388,14 +396,14 @@ his.convertToUSUnits()
 his.data()
 
 // weather forcast test
-const forecast1 = WeatherPrediction(data1, 29, 33, 'Århus', 'Sunny', 'C')
-const forecast2 = WeatherPrediction(data2, 10, 15, 'Horsens', 'Rain', 'C')
-const forecast3 = WeatherPrediction(data3, 12, 17, 'Viborg', 'Cloudy', 'MM')
+const forecast1 = WeatherPrediction(date, 29, 33, 'Århus', 'Sunny', 'C')
+const forecast2 = WeatherPrediction(date, 10, 15, 'Horsens', 'Rain', 'C')
+const forecast3 = WeatherPrediction(date, 12, 17, 'Viborg', 'Cloudy', 'MM')
 
 var forecastCollection = [forecast1, forecast2, forecast3];
 
 const forecast = WeatherForecast(forecastCollection)
-forecast.add(WeatherPrediction(data3, -4, 3, 'Viborg', 'Snow', 'MM'))
+forecast.add(WeatherPrediction(date, -4, 3, 'Viborg', 'Snow', 'MM'))
 forecast.convertToUSUnits()
 forecast.data()
 
@@ -404,7 +412,7 @@ forecast.data()
 const temp = Temperature(10, date, 'Århus', 'Sunny', 'C')
 console.log(temp.convertToF(), temp.value())
 
-const tempPred = TemperaturePrediction(data1,4, 10, 'Århus', 'Sunny', 'C');
+const tempPred = TemperaturePrediction(date,4, 10, 'Århus', 'Sunny', 'C');
 console.log(tempPred.matches(5))
 console.log(tempPred.convertToF(), tempPred.to(), tempPred.from())
 
@@ -412,7 +420,7 @@ console.log(tempPred.convertToF(), tempPred.to(), tempPred.from())
 const pre = Precipitation('High',100, date, 'Århus', 'Rain', 'MM')
 console.log(pre.convertToInches(), pre.value())
 
-const prePred = PrecipitationPrediction('High', data2, 90, 120,'Århus', 'Rain', 'MM')
+const prePred = PrecipitationPrediction('High', date, 90, 120,'Århus', 'Rain', 'MM')
 console.log(prePred.matches(80))
 console.log(prePred.convertToInches(), prePred.to(), prePred.from())
 
@@ -420,7 +428,7 @@ console.log(prePred.convertToInches(), prePred.to(), prePred.from())
 const wind = Wind('east', 26, date, 'Århus', 'Rain', 'MS')
 console.log(wind.convertToMPH(), wind.value())
 
-const windPred = WindPrediction(data3 ,26, 29, 'Århus', 'Rain', 'MS')
+const windPred = WindPrediction('east',date ,26, 29, 'Århus', 'Rain', 'MS')
 console.log(windPred.matches(26))
 console.log(windPred.convertToMPH(), windPred.to(), windPred.from())
 
@@ -428,5 +436,5 @@ console.log(windPred.convertToMPH(), windPred.to(), windPred.from())
 const cloud = CloudCovarage(0.68 , date , 'Århus', 'Sunny', 'Clouds');
 console.log(cloud.value())
 
-const cloudPred = CloudCovaragePrediction(data1, 0.68 , 0.72, 'Århus', 'Sunny', 'Clouds');
+const cloudPred = CloudCovaragePrediction(date, 0.68 , 0.72, 'Århus', 'Sunny', 'Clouds');
 console.log(cloudPred.to(), cloudPred.from(), cloudPred.matches(0.70))
