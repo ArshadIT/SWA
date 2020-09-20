@@ -109,13 +109,14 @@ class CloudCovarage extends WeatherData {
 }
 
 class WeatherHistory {
-    constructor(weatherDataCollection){
-    this.weatherDataCollection = weatherDataCollection;
+    constructor(){
+    this.weatherDataCollection = [];
     this.place;
     this.type;
     this.period;
     }
 }
+    
 WeatherHistory.prototype.getCurrentPlace = function(){
     return this.place;
 } 
@@ -193,10 +194,19 @@ WeatherHistory.prototype.convertToUSUnits = () => {
     }
 };
 
-WeatherHistory.prototype.add = (data) => {
+WeatherHistory.prototype.add = function(data) {
     this.weatherDataCollection.push(data);
-}
-
+    }
+    WeatherHistory.prototype.data = function(){
+        for( let i =0; i < this.weatherDataCollection.length; i++){
+     
+      console.log(` city ${this.weatherDataCollection[i].place} 
+      date ${this.weatherDataCollection[i].time}
+       type ${this.weatherDataCollection[i].type}
+       value ${this.weatherDataCollection[i].value()}  
+       unit ${this.weatherDataCollection[i].unit}`)
+        }
+    } 
 class WeatherPrediction extends WeatherEvent{
     constructor(to, from, place, type, unit){
         super(date, place, type, unit)
@@ -309,15 +319,14 @@ CloudCovaragePrediction.prototype.matches = function(data){
 }
 
 class WeatherForecast {
-    constructor(weatherDataCollection, place, type, period, unit, number, precipitation){
-    this.weatherDataCollection = weatherDataCollection;
-    this.place = place;
-    this.type = type;
-    this.period = period;
-    this.unit = unit;
-    this.number =  number;
-    this.precipitation = precipitation;
+    constructor(){
+    this.weatherDataCollection = [];
+    this.place;
+    this.type;
+    this.period;
+          
     }
+      
 }
 WeatherForecast.prototype.getCurrentPlace = function(){
     return this.place;
@@ -411,6 +420,16 @@ WeatherForecast.prototype.convertToUSUnits = () => {
 WeatherForecast.prototype.add = (data) => {
     weatherDataCollection.push(data);
 }
+WeatherForecast.prototype.data = function(){
+    for( let i =0; i < this.weatherDataCollection.length; i++){
+ 
+  console.log(` city ${this.weatherDataCollection[i].place} 
+  date ${this.weatherDataCollection[i].time}
+   type ${this.weatherDataCollection[i].type}
+   value ${this.weatherDataCollection[i].value()}  
+   unit ${this.weatherDataCollection[i].unit}`)
+    }
+} 
 // const eventw = new WeatherEvent(date, 'Århus', 'Sunny', 'C')
 // const temp = new Temperature(10, date, 'Århus', 'Sunny', 'C')
 // console.log(temp.unit, temp.value())
@@ -470,12 +489,13 @@ const data3 = new WeatherData(10, date, 'Viborg', 'Cloudy', 'MM')
 
 var dataCollection = [data1, data2, data3];
 
-const his = new WeatherHistory(dataCollection)
-console.log(dataCollection.push(data1), dataCollection.length)
+const his = new WeatherHistory()
 his.add(data1)
+
 his.add(data2)
-his.convertToUSUnits()
-his.data()
+console.log(his.data())
+// his.convertToUSUnits()
+ //his.data()
 
 // // weather forcast test
 // const forecast1 = WeatherPrediction(data1, 29, 33, 'Århus', 'Sunny', 'C')
