@@ -1,3 +1,4 @@
+// weather event
 class WeatherEvent {
     constructor(date, place, type, unit) {
         this.date = date;
@@ -27,7 +28,7 @@ WeatherEvent.prototype.setUnit = function (_unit) {
     this.unit=_unit;
 }
 
-
+// data interval
 class DateInterval {
     constructor(to, from) {
         this.to = to;
@@ -47,6 +48,7 @@ DateInterval.prototype.contains = function (date) {
     return (date >= this.from && date <= this.to)
 }
 
+// weather data
 class WeatherData extends WeatherEvent {
     constructor(number, date, place, type, unit) {
         super(date, place, type, unit)
@@ -62,6 +64,7 @@ WeatherData.prototype.setValue = function (_number) {
     this.number = _number
 }
 
+// temperature
 class Temperature extends WeatherData {
     constructor(number, date, place, type, unit) {
         super(number, date, place, type, unit)
@@ -75,6 +78,7 @@ Temperature.prototype.convertToC = function () {
     return (this.number - 32) * 5 / 9;
 }
 
+// wind
 class Wind extends WeatherData {
     constructor(direction, number, date, place, type, unit) {
         super(number, date, place, type, unit)
@@ -94,6 +98,7 @@ Wind.prototype.convertToMS = function () {
     return (((this.number * 1.6093) * 1000) / 60) / 60
 }
 
+// precipitation
 class Precipitation extends WeatherData {
     constructor(precipitationType, number, date, place, type, unit) {
         super(number, date, place, type, unit)
@@ -109,12 +114,14 @@ Precipitation.prototype.convertToMM = function () {
     return this.number / 25.4
 }
 
+// cloud covarage
 class CloudCovarage extends WeatherData {
     constructor(date, place, type, unit, number) {
         super(date, place, type, unit, number)
     }
 }
 
+// weather history
 class WeatherHistory {
     constructor() {
         this.weatherDataCollection = [];
@@ -211,6 +218,8 @@ WeatherHistory.prototype.data = function () {
         console.log(`City: ${data[i].place}| Date: ${data[i].time()}| Type: ${data[i].type}| Value: ${data[i].value()}| Unit: ${data[i].unit}`)
     }
 }
+
+// weather prediction 
 class WeatherPrediction extends WeatherEvent {
     constructor(date, to, from, place, type, unit) {
         super(date, place, type, unit)
@@ -241,7 +250,7 @@ WeatherPrediction.prototype.matches = function (data) {
         data.unit === this.unit);
 }
 
-
+// temperature prediction
 class TemperaturePrediction extends WeatherPrediction {
     constructor(date, to, from, place, type, unit) {
         super(date, to, from, place, type, unit)
@@ -259,6 +268,7 @@ TemperaturePrediction.prototype.convertToC = function () {
     return 'To: ' + to + ' From: ' + from;
 }
 
+// precipitation prediction
 class PrecipitationPrediction extends WeatherPrediction {
     constructor(precipitationTypes, date, to, from, place, type, unit) {
         super(date, to, from, place, type, unit)
@@ -289,6 +299,7 @@ Precipitation.prototype.convertToMM = function () {
     return 'To: ' + to + ' From: ' + from;
 }
 
+// wind prediction
 class WindPrediction extends WeatherPrediction {
     constructor(directions, date, to, from, place, type, unit) {
         super(date,to, from, place, type, unit)
@@ -318,6 +329,7 @@ WindPrediction.prototype.convertToMS = function () {
     return 'To: ' + to + ' From: ' + from;
 }
 
+// cloud covarage prediction
 class CloudCovaragePrediction extends WeatherPrediction {
     constructor(date ,to, from, place, type, unit) {
         super(date ,to, from, place, type, unit)
@@ -330,6 +342,7 @@ CloudCovaragePrediction.prototype.matches = function (data) {
         data.unit === this.unit);
 }
 
+// weather forecast
 class WeatherForecast {
     constructor() {
         this.weatherDataCollection = [];
@@ -459,7 +472,7 @@ console.log(tempPred.matches(tempData))
 console.log(tempPred.convertToF(), tempPred.to, tempPred.from)
 
 // precipitation test
-console.log('----dateInterval test----')
+console.log('----precipitation test----')
 const pre = new Precipitation('High',100, date, 'Århus', 'Rain', 'MM')
 console.log(pre.convertToInches(), pre.value())
 
