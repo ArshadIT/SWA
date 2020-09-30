@@ -41,7 +41,7 @@ function Wind(direction, number, date, place, type, unit) {
     function convertToMS() {
         return (((number * 1.6093) * 1000) / 60) / 60;
     }
-    return Object.assign({
+    return Object.assign({ 
         getDirection,
         convertToMPH,
         convertToMS
