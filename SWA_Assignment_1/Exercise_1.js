@@ -1,4 +1,4 @@
-// Weather Assignment part 1, factory function 
+// Weather Assignment part 1, factory function  
 function Event(date, _place) {
     const time = () => date;
     const place = () => _place;
