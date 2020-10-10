@@ -23,7 +23,7 @@ function DataType(_type, _unit) {
 // weather data
 function WeatherData(number, date, place, type, unit) {
     const value = () => number;
-    const setValue = (_number) => number = _number;
+    const setValue = (_number) => WeatherData(_number, date, place, type, unit)
     return Object.assign({
         value,
         setValue
@@ -35,11 +35,14 @@ function Wind(direction, number, date, place, type, unit) {
     const getDirection = () => direction;
 
     function convertToMPH() {
-        return ((number / 1000) / 1.6093) * 3600;
+        newNumber = ((number / 1000) / 1.6093) * 3600
+        return Wind(direction, newNumber, date, place, type, unit)
+;
     }
 
     function convertToMS() {
-        return (((number * 1.6093) * 1000) / 60) / 60;
+        newNumber = (((number * 1.6093) * 1000) / 60) / 60;
+        return Wind(direction, newNumber, date, place, type, unit);
     }
     return Object.assign({ 
         getDirection,
@@ -52,11 +55,13 @@ function Wind(direction, number, date, place, type, unit) {
 // temperature
 function Temperature(number, date, place, type, unit) {
     function convertToF() {
-        return number * 9 / 5 + 32;
+        newNumber = number * 9 / 5 + 32
+        return Temperature(newNumber, date, place, type, unit);
     }
 
     function convertToC() {
-        return (number - 32) * 5 / 9;
+        newNumber = (number - 32) * 5 / 9;
+        return Temperature(newNumber, date, place, type, unit);
     }
     return Object.assign({
         convertToF,
@@ -70,11 +75,13 @@ function Precipitation(precType, number, date, place, type, unit) {
     const precipitationType = () => precType;
 
     function convertToInches() {
-        return number * 25.4;
+        newNumber = number * 25.4
+        return Precipitation(precType, newNumber, date, place, type, unit);
     }
 
     function convertToMM() {
-        return number / 25.4;
+        newNumber = number / 25.4
+        return Precipitation(precType, newNumber, date, place, type, unit);
     }
     return Object.assign({
         precipitationType,
@@ -110,6 +117,7 @@ function WeatherHistory(weatherDataCollection) {
     let place;
     let type;
     let period;
+    const weatherData = [...weatherDataCollection]
     const getCurrentPlace = () => place;
     const setCurrentPlace = (_place) => place = _place;
     const clearCurrentPlace = () => {
@@ -127,6 +135,19 @@ function WeatherHistory(weatherDataCollection) {
     };
 
     const convertToUSUnits = () => {
+        weatherData.map(d => {
+            if (d.unit() === "C") {
+                newValue = d.value() * 9 / 5 + 32;
+                d.setValue(newValue)
+                d.setUnit('F')
+            } else if (d.unit() === 'MS') {
+                newValue = ((d.value() / 1000) / 1.6093) * 3600;
+                d.setValue(newValue);
+                d.setUnit('MPH')
+            }
+                    })
+
+
         for (i = 0; i < weatherDataCollection.length; i++) {
             if (weatherDataCollection[i].unit() === "C") {
                 newValue = weatherDataCollection[i].value() * 9 / 5 + 32;
@@ -222,15 +243,15 @@ function WeatherPrediction(date, _to, _from, place, type, unit) {
 // temperature prediction
 function TemperaturePrediction(date, to, from, place, type, unit) {
     function convertToF() {
-        to = to * 9 / 5 + 32;
-        from = from * 9 / 5 + 32;
-        return 'To: ' + to + ' From: ' + from;
+        newTo = to * 9 / 5 + 32;
+        newFrom = from * 9 / 5 + 32;
+        return TemperaturePrediction(date, newTo, newFrom, place, type, unit);
     }
 
     function convertToC() {
-        to = (to - 32) * 5 / 9;
-        from = (from - 32) * 5 / 9;
-        return 'To: ' + to + ' From: ' + from;
+        newTo = (to - 32) * 5 / 9;
+        newFrom = (from - 32) * 5 / 9;
+        return TemperaturePrediction(date, newTo, newFrom, place, type, unit);
     }
     return Object.assign({
         convertToF,
@@ -248,15 +269,15 @@ function PrecipitationPrediction(types, date, to, from, place, type, unit) {
     };
 
     function convertToInches() {
-        to = to * 25.4;
-        from = from * 25.4;
-        return 'To: ' + to + ' From: ' + from;
+        newTo = to * 25.4;
+        newFrom = from * 25.4;
+        return PrecipitationPrediction(types, date, newTo, newFrom, place, type, unit);
     }
 
     function convertToMM() {
-        to = to / 25.4;
-        from = from / 25.4;
-        return 'To: ' + to + ' From: ' + from;
+        newTo = to / 25.4;
+        newFrom = from / 25.4;
+        return PrecipitationPrediction(types, date, newTo, newFrom, place, type, unit);
     }
     return Object.assign({
         Types,
@@ -276,15 +297,15 @@ function WindPrediction(windDirections, date, to, from, place, type, unit) {
     };
 
     function convertToMPH() {
-        to = ((to / 1000) / 1.6093) * 3600;
-        from = ((to / 1000) / 1.6093) * 3600;
-        return 'To: ' + to + ' From: ' + from;
+        newTo = ((to / 1000) / 1.6093) * 3600;
+        newFrom = ((to / 1000) / 1.6093) * 3600;
+        return WindPrediction(windDirections, date, newTo, newFrom, place, type, unit);
     }
 
     function convertToMS() {
-        to = (((to * 1.6093) * 1000) / 60) / 60;
-        from = ((from / 1000) / 1.6093) * 3600;
-        return 'To: ' + to + ' From: ' + from;
+        newTo = (((to * 1.6093) * 1000) / 60) / 60;
+        newFrom = ((from / 1000) / 1.6093) * 3600;
+        return WindPrediction(windDirections, date, newTo, newFrom, place, type, unit);
     }
     return Object.assign({
         directions,
