@@ -56,6 +56,7 @@ class ImmutableCompany {
 
 let company = new ImmutableCompany('VIA', 'Chr. M...', [])
 company = company.addEmployee(new Person('Me', 51)) // x = f(x)
+console.log(company)
 
 // Factory function
 function immutable_company(name, address, _employees) {
