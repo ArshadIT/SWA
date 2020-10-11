@@ -310,76 +310,72 @@ function WeatherForecast(weatherDataCollection) {
     let place;
     let type;
     let period;
+    const weatherData = [...weatherDataCollection];
     const getCurrentPlace = () => place;
-    const setCurrentPlace = (_place) => place = _place;
+    // const setCurrentPlace = (_place) => place = _place;
     const clearCurrentPlace = () => {
         place = undefined;
     };
     const getCurrentType = () => type;
-    const setCurrentType = (_type) => type = _type;
+    // const setCurrentType = (_type) => type = _type;
     const clearCurrentType = () => {
         type = undefined
     };
     const getCurrentPeriod = () => period;
-    const setCurrentPeriod = (_period) => period = _period;
+    // const setCurrentPeriod = (_period) => period = _period;
     const clearCurrentPeriod = () => {
         period = undefined
     };
 
     const convertToUSUnits = () => {
-        for (i = 0; i < weatherDataCollection.length; i++) {
-            if (weatherDataCollection[i].unit() === "C") {
-                newTo = weatherDataCollection[i].to() * 9 / 5 + 32;
-                newFrom = weatherDataCollection[i].from() * 9 / 5 + 32;
-                weatherDataCollection[i].setTo(newTo);
-                weatherDataCollection[i].setFrom(newFrom);
-                weatherDataCollection[i].setUnit('F')
-            } else if (weatherDataCollection[i].unit() === 'MS') {
-                newTo = ((weatherDataCollection[i].to() / 1000) / 1.6093) * 3600;
-                newFrom = ((weatherDataCollection[i].from() / 1000) / 1.6093) * 3600;
-                weatherDataCollection[i].setTo(newTo);
-                weatherDataCollection[i].setFrom(newFrom);
-                weatherDataCollection[i].setUnit('MPH')
-            } else if (weatherDataCollection[i].unit() === 'MM') {
-                newTo = weatherDataCollection[i].to() * 25.4;
-                newFrom = weatherDataCollection[i].from() * 25.4;
-                weatherDataCollection[i].setTo(newTo);
-                weatherDataCollection[i].setFrom(newFrom);
-                weatherDataCollection[i].setUnit('Inches')
+        let acc = []
+        weatherData.map(d => {
+            if (d.unit() === "C") {
+                newTo = d.to() * 9 / 5 + 32;
+                newFrom = d.from() * 9 / 5 + 32;
+                newObj = WeatherPrediction(d.time(), newTo, newFrom, d.place(), d.type(), 'F')
+                acc.push(newObj);
+            } else if (d.unit() === 'MS') {
+                newTo = ((d.to() / 1000) / 1.6093) * 3600;
+                newFrom = ((d.from() / 1000) / 1.6093) * 3600;
+                newObj = WeatherPrediction(d.time(), newTo, newFrom, d.place(), d.type(), 'MPH')
+                acc.push(newObj);
+            } else if (d.unit() === 'MM') {
+                newTo = d.to() * 25.4;
+                newFrom = d.from() * 25.4;
+                newObj = WeatherPrediction(d.time(), newTo, newFrom, d.place(), d.type(), 'Inches')
+                acc.push(newObj);
             } else {
-                return 'Undefined unit'
-            }
-        }
+                return undefined;
+            }})
+            return console.log(acc[0].unit());
     };
 
     const convertToInternationalUnits = () => {
-        for (i = 0; i < weatherDataCollection.length; i++) {
-            if (weatherDataCollection[i].unit() === "F") {
-                newTo = (weatherDataCollection[i].to() - 32) * 5 / 9;
-                newFrom = (weatherDataCollection[i].from() - 32) * 5 / 9;
-                weatherDataCollection[i].setTo(newTo);
-                weatherDataCollection[i].setFrom(newFrom);
-                weatherDataCollection[i].setUnit('C')
-
-            } else if (weatherDataCollection[i].unit() === 'MPH') {
-                newTo = (((weatherDataCollection[i].to() * 1.6093) * 1000) / 60) / 60;
-                newFrom = (((weatherDataCollection[i].from() * 1.6093) * 1000) / 60) / 60;
-                weatherDataCollection[i].setTo(newTo);
-                weatherDataCollection[i].setFrom(newFrom);
-                weatherDataCollection[i].setUnit('MS')
-            } else if (weatherDataCollection[i].unit() === 'Inches') {
-                newTo = weatherDataCollection[i].to() / 25.4;
-                newFrom = weatherDataCollection[i].from() / 25.4;
-                weatherDataCollection[i].setTo(newTo);
-                weatherDataCollection[i].setFrom(newFrom);
-                weatherDataCollection[i].setUnit('MM')
+        let acc = []
+        weatherData.map(d => {
+            if (d.unit() === "F") {
+                newTo = (d.to() - 32) * 5 / 9;
+                newFrom = (d.from() - 32) * 5 / 9;
+                newObj = WeatherPrediction(d.time(), newTo, newFrom, d.place(), d.type(), 'C')
+                acc.push(newObj);
+            } else if (d.unit() === 'MPH') {
+                newTo = (((d.to() * 1.6093) * 1000) / 60) / 60;
+                newFrom = (((d.from() * 1.6093) * 1000) / 60) / 60;
+                newObj = WeatherPrediction(d.time(), newTo, newFrom, d.place(), d.type(), 'MS')
+                acc.push(newObj);
+            } else if (d.unit() === 'Inches') {
+                newTo = d.to() / 25.4;
+                newFrom = d.from() / 25.4;
+                newObj = WeatherPrediction(d.time(), newTo, newFrom, d.place(), d.type(), 'MM')
+                acc.push(newObj);
             } else {
-                return 'Undefined unit'
-            }
-        }
+                return undefined;
+            }})
+            return console.log(acc[0].unit());
     };
 
-    const add = (data) => weatherDataCollection.push(data);
+    const add = (data) => WeatherPrediction([...weatherData, data]);
 
     function data() {
         for (let i = 0; i < weatherDataCollection.length; i++) {
@@ -390,13 +386,10 @@ function WeatherForecast(weatherDataCollection) {
 
     return {
         getCurrentPlace,
-        setCurrentPlace,
         clearCurrentPlace,
         getCurrentType,
-        setCurrentType,
         clearCurrentType,
         getCurrentPeriod,
-        setCurrentPeriod,
         clearCurrentPeriod,
         convertToUSUnits,
         convertToInternationalUnits,
@@ -419,5 +412,18 @@ his.convertToInternationalUnits();
 newHis = his.add(WeatherData(10, date, 'Viborg', 'Cloudy', 'MM'))
 newHis.data()
 // his.data()
+
+// weather forcast test
+console.log('----weather forcast test----')
+const forecast1 = WeatherPrediction(date, 29, 33, 'Århus', 'Sunny', 'C')
+const forecast2 = WeatherPrediction(date, 10, 15, 'Horsens', 'Rain', 'C')
+const forecast3 = WeatherPrediction(date, 12, 17, 'Viborg', 'Cloudy', 'MM')
+
+var forecastCollection = [forecast1, forecast2, forecast3];
+
+const forecast = WeatherForecast(forecastCollection)
+forecast.add(WeatherPrediction(date, -4, 3, 'Viborg', 'Snow', 'MM'))
+forecast.convertToUSUnits()
+forecast.data()
 
 
