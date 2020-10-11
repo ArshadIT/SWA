@@ -157,7 +157,7 @@ function WeatherHistory(weatherDataCollection) {
             if (d.unit() === "F") {
                 newValue = (d.value() - 32) * 5 / 9;
                 newObj = WeatherData(newValue, d.time(), d.place(), d.type(), 'C')
-                acc.push(newObj);
+                acc.push(newObj); 
             } else if (d.unit() === 'MPH') {
                 newValue = (((d.value() * 1.6093) * 1000) / 60) / 60;
                 newObj = WeatherData(newValue, d.time(), d.place(), d.type(), 'MS')
