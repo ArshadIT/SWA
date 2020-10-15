@@ -29,13 +29,14 @@
                     const table_body = document.getElementById('weather_data')
                     const weatherData = JSON.parse(request.responseText)
                     const acc = [];
-                    var today = new Date();
-                    var secondDate = today.setDate( today.getDate() - 5 );
-                    var sum = 0;
-                    var avrWind = 0;
-                    var avrCloud = 0;
+                    let today = new Date();
+                    let secondDate = new Date(today.setDate( today.getDate() - 5 ));
+                    let yesterday = new Date(today.setDate( today.getDate() - 1 ));
+                    let sum = 0;
+                    let avrWind = 0;
+                    let avrCloud = 0;
                     const windDirection = [];
-                    for(var i = 0; i < weatherData.length; i++){
+                    for(let i = 0; i < weatherData.length; i++){
                       const tr = table_body.appendChild(document.createElement('tr'))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].place))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].value))
@@ -65,7 +66,9 @@
                     const document = window.document
                     const table_body = document.getElementById('forecast_data')
                     const weatherData = JSON.parse(request.responseText)
-                    for(var i = 0; i < weatherData.length; i++){
+                    for(let i = 0; i < weatherData.length; i++){
+                      const date = new Date(weatherData[i].time)
+                      if(date.getUTCHours()==11){
                       const tr = table_body.appendChild(document.createElement('tr'))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].place))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].from))
@@ -73,7 +76,9 @@
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].type))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].unit))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].time)) 
+                      }
                     }   
+                    
         }
         }
        
