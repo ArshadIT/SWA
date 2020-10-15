@@ -4,7 +4,7 @@ const compose = (...fs) => x => fs.reduceRight((y, f) => f(y), x)
 // Concatenative inheritance mixin style
 
 function Event({time, place}) {
-    function getTime() { return time }
+    function getTime() { return  time }
     function getPlace() { return place }
     return { getTime, getPlace }
 }
