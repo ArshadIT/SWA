@@ -1,8 +1,116 @@
 <html>
-  <head>
 
-  </head>
-  <body>
-    
-  </body>
+<head>
+  <style>
+    td {
+      width: 40px;
+      height: 40px;
+      border: 1px solid black;
+    }
+
+    table {
+      border: 1px solid black;
+      border-spacing: 0;
+    }
+  </style>
+  <script type='module'>
+    function mode(arr){
+    return arr.sort((a,b) =>
+          arr.filter(v => v===a).length
+        - arr.filter(v => v===b).length
+    ).pop();
+    }
+    window.init = function() {
+        const request = new XMLHttpRequest()
+        request.open('GET', 'http://localhost:8080/data')
+        request.send()
+        request.onload = () => {
+                    const document = window.document
+                    const table_body = document.getElementById('weather_data')
+                    const weatherData = JSON.parse(request.responseText)
+                    const acc = [];
+                    var today = new Date();
+                    var secondDate = today.setDate( today.getDate() - 5 );
+                    var sum = 0;
+                    var avrWind = 0;
+                    var avrCloud = 0;
+                    const windDirection = [];
+                    for(var i = 0; i < weatherData.length; i++){
+                      const tr = table_body.appendChild(document.createElement('tr'))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].place))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].value))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].type))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].unit))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].time)) 
+                      if(Date.parse(weatherData[i].time) >= secondDate && weatherData[i].type==="temperature"){
+                        acc.push(weatherData[i].value)
+                      } else if (Date.parse(weatherData[i].time) >= secondDate && weatherData[i].type==="precipitation") {
+                        sum += parseFloat(weatherData[i].value)
+                      } else if (Date.parse(weatherData[i].time) >= secondDate && weatherData[i].type==="wind speed") {
+                        avrWind += parseFloat(weatherData[i].value)
+                        windDirection.push(weatherData[i].direction)
+                      } else if (Date.parse(weatherData[i].time) >= secondDate && weatherData[i].type==="cloud coverage") {
+                        avrCloud += parseFloat(weatherData[i].value)
+                      }
+                    }   
+                    console.log(Math.min(...acc));
+                    console.log(Math.max(...acc));
+                    console.log(sum);
+                    console.log(avrWind/weatherData.length)
+                    console.log(mode(windDirection))
+                    console.log(avrCloud/weatherData.length)
+        request.open('GET', 'http://localhost:8080/forecast')
+        request.send()
+        request.onload = () => {
+                    const document = window.document
+                    const table_body = document.getElementById('forecast_data')
+                    const weatherData = JSON.parse(request.responseText)
+                    for(var i = 0; i < weatherData.length; i++){
+                      const tr = table_body.appendChild(document.createElement('tr'))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].place))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].from))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].to))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].type))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].unit))
+                      tr.insertCell().appendChild(document.createTextNode(weatherData[i].time)) 
+                    }   
+        }
+        }
+       
+   }
+</script>
+</head>
+
+<body onload="init()">
+  <div id='base'>
+    <h1>Weather Data</h1>
+    <table id='employees'>
+      <thead>
+        <tr>
+          <td>Place</td>
+          <td>Value</td>
+          <td>Type</td>
+          <td>Unit</td>
+          <td>Time</td>
+        </tr>
+      </thead>
+      <tbody id='weather_data'></tbody>
+    </table>
+    <h1>Weather Forecast</h1>
+    <table id='forecast'>
+      <thead>
+        <tr>
+          <td>Place</td>
+          <td>From</td>
+          <td>To</td>
+          <td>Type</td>
+          <td>Unit</td>
+          <td>Time</td>
+        </tr>
+      </thead>
+      <tbody id='forecast_data'></tbody>
+    </table>
+  </div>
+</body>
+
 </html>
