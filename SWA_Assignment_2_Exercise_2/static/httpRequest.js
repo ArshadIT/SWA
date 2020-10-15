@@ -21,14 +21,18 @@ function mode(arr){
                     let avrCloud = 0;
                     const windDirection = [];
                     for(let i = 0; i < weatherData.length; i++){
+                      if(weatherData[i].place=='Horsens' && Date.parse(weatherData[i].time) >= secondDate && weatherData[i].type==="temperature"){
+                        
                       const tr = table_body.appendChild(document.createElement('tr'))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].place))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].value))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].type))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].unit))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].time)) 
+                      }
                       if(Date.parse(weatherData[i].time) >= secondDate && weatherData[i].type==="temperature"){
                         acc.push(weatherData[i].value)
+
                       } else if (Date.parse(weatherData[i].time) >= secondDate && weatherData[i].type==="precipitation") {
                         sum += parseFloat(weatherData[i].value)
                       } else if (Date.parse(weatherData[i].time) >= secondDate && weatherData[i].type==="wind speed") {
@@ -51,8 +55,7 @@ function mode(arr){
                     const table_body = document.getElementById('forecast_data')
                     const weatherData = JSON.parse(request.responseText)
                     for(let i = 0; i < weatherData.length; i++){
-                      const date = new Date(weatherData[i].time)
-                      if(date.getUTCHours()){
+                      if(weatherData[i].place=='Horsens') {
                       const tr = table_body.appendChild(document.createElement('tr'))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].place))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].from))
@@ -61,6 +64,7 @@ function mode(arr){
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].unit))
                       tr.insertCell().appendChild(document.createTextNode(weatherData[i].time)) 
                       }
+                      
                     }   
                     
         }
