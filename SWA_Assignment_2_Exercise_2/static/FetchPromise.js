@@ -10,7 +10,6 @@ window.init = function() {
   
   //async function:
 async function asyncCall() {
-    console.log('calling');
     try {
         const weatherResponse = await fetch('http://localhost:8080/data')
         const weatherData = await weatherResponse.json()
