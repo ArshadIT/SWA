@@ -13,7 +13,7 @@
       border-spacing: 0;
     }
   </style>
-  <script src="httpRequest.js"></script>
+  <script src="XMLHttpRequest.js"></script>
 </head>
 
 <body onload="init()">
@@ -42,9 +42,62 @@
           <td>Time</td>
         </tr>
       </thead>
-      <tbody id='temp_data'></tbody>
+      <tbody id='table_min'></tbody>
     </table>
-    <h1>Weather Forecast Horsens</h1>
+    <h1>Maximum Temperature Horsens</h1>
+    <table id='temperatureMax'>
+      <thead>
+        <tr>
+          <td>Place</td>
+          <td>Value</td>
+          <td>Type</td>
+          <td>Unit</td>
+          <td>Time</td>
+        </tr>
+      </thead>
+      <tbody id='table_max'></tbody>
+    </table>
+    <h1>Sum of precipitation</h1>
+    <table id='precipitation'>
+      <thead>
+        <tr>
+          <td>Place</td>
+          <td>Total</td>
+        </tr>
+      </thead>
+      <tbody id='table_prec'></tbody>
+    </table>
+    <h1>Average Wind Spreed</h1>
+    <table id='wind'>
+      <thead>
+        <tr>
+          <td>Place</td>
+          <td>Average</td>
+        </tr>
+      </thead>
+      <tbody id='table_wind'></tbody>
+    </table>
+    <h1>Dominant Wind Direction</h1>
+    <table id='windDir'>
+      <thead>
+        <tr>
+          <td>Place</td>
+          <td>Direction</td>
+        </tr>
+      </thead>
+      <tbody id='table_windDir'></tbody>
+    </table>
+    <h1>Average Cloud Covarage</h1>
+    <table id='cloud'>
+      <thead>
+        <tr>
+          <td>Place</td>
+          <td>Average</td>
+        </tr>
+      </thead>
+      <tbody id='table_cloud'></tbody>
+    </table>
+    <h1>Hourly predictions for the next 24 hours</h1>
     <table id='forecast'>
       <thead>
         <tr>
